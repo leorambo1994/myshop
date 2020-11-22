@@ -77,10 +77,10 @@ router.post('/login', function (req, res, next) {
 // });
 
 // check 验证码
-function checkSmsCode(req , checkObj) {
+function checkSmsCode(req, checkObj) {
   // 检查上一次 session 值与 用户这一次注册提交的验证码、手机号是否一致
 
-  if ( (req.session.userInfo.mobile == checkObj.mobile) && (req.session.userInfo.smscode == checkObj.smscode)) {
+  if ((req.session.userInfo.mobile == checkObj.mobile) && (req.session.userInfo.smscode == checkObj.smscode)) {
     return obj = {
       code: '0',
       msg: "验证成功"
@@ -100,8 +100,8 @@ router.post('/register', function (req, res, next) {
   var sms_code = req.body.smscode;
 
   var checkObj = {
-    mobile : phone_number ,
-    smscode : sms_code
+    mobile: phone_number,
+    smscode: sms_code
   };
 
   User.findOne({ username: req.body.username })
@@ -116,97 +116,99 @@ router.post('/register', function (req, res, next) {
       } else {
 
         // 检查 session 是否合法
-        var resObj = checkSmsCode(req , checkObj);
+        // var resObj = checkSmsCode(req , checkObj);
 
-        if (resObj.code == '0') {
-          
-          const user_entity = new User({
+        // if (resObj.code == '0') {
 
-            username: req.body.username,
-            password: req.body.password,
-            email: req.body.email
-  
-          });
-  
-          user_entity   // promise 操作
-            .save()
-            .then(result => {
-  
-              console.log(result);
-              res.json({
-                code: '0',      // 写入数据库
-                msg: '短信验证成功'
-              });
-            })
-            .catch(err => {
-  
-              console.log(err);
-              res.status(500).json({
-                error: err
-              });
+        const user_entity = new User({
+
+          username: req.body.username,
+          password: req.body.password,
+          email: req.body.email,
+          mobile: req.body.mobile
+
+        });
+
+        user_entity   // promise 操作
+          .save()
+          .then(result => {
+
+            console.log(result);
+            res.json({
+              code: '0',      // 写入数据库
+              msg: '短信验证成功'
             });
+          })
+          .catch(err => {
 
-        } else {
-          res.json({
-            code: '1',     
-            msg: '短信验证失败'
+            console.log(err);
+            res.status(500).json({
+              error: err
+            });
           });
-        }
+
+        // } 
+        //   else {
+        //   res.json({
+        //     code: '1',
+        //     msg: '短信验证失败'
+        //   });
+        // }
       }
     })
 });
 
 
 // 获取短信验证码
-router.post('/smscode', function (req, res, next) {
+// router.post('/smscode', function (req, res, next) {
 
-  var phone_number = req.body.mobile;
-  var sms_code = (Math.random() * 6).toString();
-  var content = "您的验证码：" + sms_code;
+//   var phone_number = req.body.mobile;
+//   var sms_code = (Math.random() * 6).toString();
+//   var content = "您的验证码：" + sms_code;
 
-  iHuyi.send(phone_number, content, function (err, smsId) {
-    if (err) {
-      console.log(err.message);
-      
-      res.json({
-        code: '1',
-        msg: "验证码发送失败"
-      });
-    } else {
+//   iHuyi.send(phone_number, content, function (err, smsId) {
+//     if (err) {
+//       console.log(err.message);
 
-      req.session.userInfo = {
-        smscode: sms_code,
-        mobile: phone_number,
-        send_time: new Date().getTime()
-      };
-      console.log("SMS sent, and smsId is " + smsId);
-      res.json({
-        code: '0',
-        msg: "验证码发送成功"
-      });
-    }
-  });
+//       res.json({
+//         code: '1',
+//         msg: "验证码发送失败"
+//       });
+//     } else {
 
-  // var phone_number = req.body.mobile;
+//       req.session.userInfo = {
+//         smscode: sms_code,
+//         mobile: phone_number,
+//         send_time: new Date().getTime()
+//       };
+//       console.log("SMS sent, and smsId is " + smsId);
+//       res.json({
+//         code: '0',
+//         msg: "验证码发送成功"
+//       });
+//     }
+//   });
 
-  // req.session.mobile = {
-  //   session_key : phone_number
-  // };
-  // res.json({
-  //   session_code : req.session.mobile
-  // });
-});
+//   // var phone_number = req.body.mobile;
+
+//   // req.session.mobile = {
+//   //   session_key : phone_number
+//   // };
+//   // res.json({
+//   //   session_code : req.session.mobile
+//   // });
+// });
 
 // 验证是否有 session?
-// router.post('/test-is-login', function (req, res, next) {
-//   if (!req.session.mobile) {
-//     console.log('no session!');
-//     res.json({ mobile: '0' });
-//   } else {
-//     console.log('user login is ok!');
-//     res.json({ mobile: req.session.mobile });
-//   }
-// });
+router.post('/test-is-login', function (req, res, next) {
+  if (!req.session.mobile) {
+    console.log('no session!');
+    res.json({ mobile: '0' });
+  } else {
+    console.log('user login is ok!');
+    res.json({ mobile: req.session.mobile });
+  }
+});
 
 
 

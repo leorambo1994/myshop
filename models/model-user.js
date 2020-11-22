@@ -7,7 +7,7 @@ var userSchema = new mongoose.Schema({
     username : String,
     password : String,
     email : String,
-
+    mobile : Number,
 });
 
 // 输出这个model , module 是 node.js 自带的
