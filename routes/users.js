@@ -7,14 +7,14 @@ var User = require('../models/model-user');
 var IHuyi = require("ihuyi106");
 var account = "your_account";
 var password = "your_password";
-var apiKey = "apikey"; // international api key, if exist
 var mobile = "158********";
 var iCountryCode = "1";
 var iMobile = "63*********";
 var content = "Hello world!";
 
 // apiKey is optional
-var iHuyi = new IHuyi(account, password, apiKey);
+// var iHuyi = new IHuyi(account, password, apiKey);
+var iHuyi = new IHuyi(account, password);
 
 
 
@@ -161,7 +161,7 @@ router.post('/register', function (req, res, next) {
 router.post('/smscode', function (req, res, next) {
 
   var phone_number = req.body.mobile;
-  var sms_code = (Math.random() * 4).toString();
+  var sms_code = (Math.random() * 6).toString();
   var content = "您的验证码：" + sms_code;
 
   iHuyi.send(phone_number, content, function (err, smsId) {

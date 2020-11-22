@@ -19,7 +19,7 @@ var mongoose = require('mongoose');
 mongoose.Promise = global.Promise; // node.js 标准的 promise
 
 // 连接 MongoDB ， 创建 DB 如：myshop
-mongoose.connect('mongodb://localhost/myshop')
+mongoose.connect('mongodb://localhost/myshop',{ useNewUrlParser: true , useUnifiedTopology: true})
 .then( () => console.log('connection success!'))
 .catch( (err) => console.log(err) );
 
@@ -66,7 +66,11 @@ app.use(require('express-session')({
   saveUninitialized: true
 }));
 
-app.use(bodyParser()); // 设置中间件 bodyParser()
+app.use(bodyParser.json()); // 设置中间件 bodyParser()
+// app.use(bodyParser.urlencoded()); // 设置中间件 bodyParser()
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 
 app.use(express.static(path.join(__dirname, 'public')));
 

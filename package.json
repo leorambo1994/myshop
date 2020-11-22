@@ -6,6 +6,8 @@
     "start": "nodemon ./bin/www"
   },
   "dependencies": {
+    "@alicloud/mns": "^1.0.0",
+    "@alicloud/pop-core": "^1.7.10",
     "connect-mongodb-session": "^2.4.1",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",

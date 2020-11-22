@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 // 创建 product 的 schema
 var productSchema = new mongoose.Schema({
     // id : Number,
-    title : String,
+    imgUrl : String,
     detail : String,
     price : Number,
 });
