@@ -30,7 +30,7 @@ var BannersRouter = require('./routes/banners'); // 轮播路由
 
 var app = express();
 
-// for sms code
+// for 数据库
 var store = new MongoDBStore({
   uri: 'mongodb://localhost:27017/myshop',
   collection: 'mySessions'

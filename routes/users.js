@@ -4,22 +4,22 @@ var router = express.Router();
 var User = require('../models/model-user');
 
 // 短信验证码引入
-var IHuyi = require("ihuyi106");
-var account = "your_account";
-var password = "your_password";
-var mobile = "158********";
-var iCountryCode = "1";
-var iMobile = "63*********";
-var content = "Hello world!";
+// var IHuyi = require("ihuyi106");
+// var account = "your_account";
+// var password = "your_password";
+// var mobile = "158********";
+// var iCountryCode = "1";
+// var iMobile = "63*********";
+// var content = "Hello world!";
 
 // apiKey is optional
 // var iHuyi = new IHuyi(account, password, apiKey);
-var iHuyi = new IHuyi(account, password);
+// var iHuyi = new IHuyi(account, password);
 
 
 
 /* ---------------------------------------- */
-// GET 获取商品列表
+// GET 获取用户列表
 router.get('/', function (req, res, next) {
 
   User.find(function (err, users) {
@@ -96,13 +96,13 @@ function checkSmsCode(req, checkObj) {
 // 注册 register POST 请求
 router.post('/register', function (req, res, next) {
 
-  var phone_number = req.body.mobile;
-  var sms_code = req.body.smscode;
+  // var phone_number = req.body.mobile;
+  // var sms_code = req.body.smscode;
 
-  var checkObj = {
-    mobile: phone_number,
-    smscode: sms_code
-  };
+  // var checkObj = {
+  //   mobile: phone_number,
+  //   smscode: sms_code
+  // };
 
   User.findOne({ username: req.body.username })
     .exec()
@@ -136,7 +136,7 @@ router.post('/register', function (req, res, next) {
             console.log(result);
             res.json({
               code: '0',      // 写入数据库
-              msg: '短信验证成功'
+              msg: '用户注册成功'
             });
           })
           .catch(err => {
@@ -210,6 +210,49 @@ router.post('/test-is-login', function (req, res, next) {
   }
 });
 
+// GET 指定的用户 by id
+router.get('/:id', function(req, res, next) {
+  
+  User.findById( req.params.id , function ( err , data) {
+    if (err) {
+      return next(err); //node.js 处理机制： 错误先行
+    }
+
+    res.json(data);
+  });
+});
+
+// 修改指定的用户 by id
+router.put('/:id', function(req, res, next) {
+
+  User.findByIdAndUpdate( req.params.id , req.body , function ( err , put ) {
+    if (err) {
+      return next(err); //node.js 处理机制： 错误先行
+    }
+
+    // res.json(put);
+    res.json({   // 返回一个JSON格式的对象
+      code : "0",
+      msg : "用户修改成功！"
+    });
+  });
+});
+
+// 删除指定的用户 by id
+router.delete('/:id', function(req, res, next) {
+
+  User.findByIdAndRemove( req.params.id , function ( err , data ) {
+    if (err) {
+      return next(err); //node.js 处理机制： 错误先行
+    }
+
+    // res.json(data);
+    res.json({   // 返回一个JSON格式的对象
+      code : '0',
+      msg : '删除成功！'
+    });
+  });
+});
 
 
 module.exports = router;

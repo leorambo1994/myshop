@@ -13,9 +13,7 @@ router.get('/', function(req, res, next) {
     }
 
     res.json(data);
-
   } );
-
 });
 
 // POST 请求 (添加商品)
